@@ -35,7 +35,7 @@ function translateToKorean() {
 function showTranslationGuide(targetLanguage) {
   let message = '';
   
-  if (targetLanguage.includes('중국어') || targetLanguage.includes('简体') || targetLanguage.includes('繁體')) 
+  if (targetLanguage.includes('중국어') || targetLanguage.includes('简体') || targetLanguage.includes('繁體')) {
     message = `
 🇨🇳 中国开发团队专用 - 翻译指南
 
