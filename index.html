@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="EIBE 기술요청서 관리 시스템 - 技术请求管理系统">
   <meta name="keywords" content="기술요청서,技术请求,개발요청,开发请求,전산개발,系统开发">
-  <title>EIBE 기술요청서 뷰어 - 技术请求查看器</title>
+  <title id="title-text">EIBE 기술요청서 뷰어 - 技术请求查看器</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
@@ -17,61 +17,54 @@
   <header class="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white py-16 pb-12 text-center mb-16 rounded-b-4xl shadow-2xl relative overflow-hidden">
     <!-- 배경 패턴 -->
     <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
-    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
-    
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
     <!-- 번역 버튼들 -->
     <div class="absolute top-4 right-6 flex gap-2 z-20">
-      <button onclick="translateToSimplifiedChinese()" title="简体中文翻译 - 간체 중국어 번역" class="bg-white/20 backdrop-blur-sm text-white border border-white/30 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
+      <button onclick="setLanguage('zh_CN')" title="简体中文" class="bg-white/20 backdrop-blur-sm text-white border border-white/30 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
         <span class="text-xs">🇨🇳</span>
         简体中文
       </button>
-      <button onclick="translateToTraditionalChinese()" title="繁體中文翻譯 - 번체 중국어 번역" class="bg-white/20 backdrop-blur-sm text-white border border-white/30 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
+      <button onclick="setLanguage('zh_TW')" title="繁體中文" class="bg-white/20 backdrop-blur-sm text-white border border-white/30 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
         <span class="text-xs">🇹🇼</span>
         繁體中文
       </button>
-      <button onclick="translateToKorean()" title="한국어로 복원 - 恢复韩语" class="bg-white/30 backdrop-blur-sm text-white border border-white/50 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/40 transition-all duration-200 flex items-center gap-1">
+      <button onclick="setLanguage('ko')" title="한국어" class="bg-white/30 backdrop-blur-sm text-white border border-white/50 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/40 transition-all duration-200 flex items-center gap-1">
         <span class="text-xs">🇰🇷</span>
         한국어
       </button>
     </div>
-    
     <div class="relative z-10">
       <div class="mb-6">
         <div class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 mb-6">
           <span class="material-icons text-blue-200 notranslate">code</span>
-          <span class="text-blue-100 font-medium">Technical Request Viewer</span>
+          <span id="sub-title" class="text-blue-100 font-medium">Technical Request Viewer</span>
         </div>
       </div>
-      
-      <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">
+      <h1 id="main-title" class="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">
         EIBE 전산개발 기술요청서 뷰어
       </h1>
-      
-      <p class="text-blue-100 text-xl font-medium mb-8">동수 개발사 참고용</p>
-      
+      <p id="main-desc" class="text-blue-100 text-xl font-medium mb-8">동수 개발사 참고용</p>
       <div class="flex items-center justify-center gap-8 mb-8">
         <div class="flex items-center gap-2 text-blue-200">
           <span class="material-icons text-sm notranslate">developer_mode</span>
-          <span class="text-sm">개발 참고용</span>
+          <span id="dev-ref" class="text-sm">개발 참고용</span>
         </div>
         <div class="w-px h-4 bg-blue-300/50"></div>
         <div class="flex items-center gap-2 text-blue-200">
           <span class="material-icons text-sm notranslate">description</span>
-          <span class="text-sm">기술 요청서</span>
+          <span id="tech-request" class="text-sm">기술 요청서</span>
         </div>
         <div class="w-px h-4 bg-blue-300/50"></div>
         <div class="flex items-center gap-2 text-blue-200">
           <span class="material-icons text-sm notranslate">handshake</span>
-          <span class="text-sm">협업 도구</span>
+          <span id="collab-tool" class="text-sm">협업 도구</span>
         </div>
       </div>
-      
       <div class="relative">
         <div class="h-1 w-48 bg-gradient-to-r from-transparent via-white to-transparent mx-auto rounded-full shadow-lg" style="animation: slowPulse 3s ease-in-out infinite;"></div>
         <div class="absolute inset-0 h-1 w-48 bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto rounded-full" style="animation: slowPing 4s ease-in-out infinite;"></div>
         <div class="absolute inset-0 h-1 w-48 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full" style="animation: slowPulse 3s ease-in-out infinite; animation-delay: 1.5s;"></div>
       </div>
-      
       <style>
         @keyframes slowPulse {
           0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
@@ -89,23 +82,23 @@
     <section id="request-list-section" class="opacity-100 translate-y-0 transition-all duration-500 ease-out">
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h2 class="text-3xl font-extrabold text-gray-900 mb-2">요청서 목록</h2>
-          <p class="text-gray-600">등록된 기술 요청사항을 확인하세요</p>
+          <h2 id="list-title" class="text-3xl font-extrabold text-gray-900 mb-2">요청서 목록</h2>
+          <p id="list-desc" class="text-gray-600">등록된 기술 요청사항을 확인하세요</p>
         </div>
         <div class="flex items-center gap-2 text-sm text-gray-500">
           <span class="material-icons text-blue-500 notranslate">info</span>
-          총 <span id="request-count" class="font-semibold text-blue-600">0</span>건
+          <span id="total-label">총</span> <span id="request-count" class="font-semibold text-blue-600">0</span><span id="count-unit">건</span>
         </div>
       </div>
       <div class="overflow-hidden rounded-2xl shadow-xl border border-gray-100">
         <table id="request-list" class="w-full border-collapse bg-white">
           <thead>
             <tr class="bg-gradient-to-r from-gray-50 to-blue-50">
-              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">번호</th>
-              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">요청자</th>
-              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">요청사항</th>
-              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">등록일</th>
-              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">상세보기</th>
+              <th id="th-num" class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">번호</th>
+              <th id="th-requester" class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">요청자</th>
+              <th id="th-content" class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">요청사항</th>
+              <th id="th-date" class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">등록일</th>
+              <th id="th-detail" class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">상세보기</th>
             </tr>
           </thead>
           <tbody>
@@ -117,19 +110,66 @@
     <section id="request-detail-section" class="hidden opacity-0 translate-y-10 pointer-events-none transition-all duration-500 ease-out">
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h2 class="text-3xl font-extrabold text-gray-900 mb-2">요청서 상세</h2>
-          <p class="text-gray-600">요청사항의 자세한 내용을 확인하세요</p>
+          <h2 id="detail-title" class="text-3xl font-extrabold text-gray-900 mb-2">요청서 상세</h2>
+          <p id="detail-desc" class="text-gray-600">요청사항의 자세한 내용을 확인하세요</p>
         </div>
         <div class="flex justify-end gap-3">
           <button id="back-btn" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-none px-8 py-3 rounded-xl cursor-pointer font-bold shadow-lg hover:from-blue-600 hover:to-indigo-600 hover:shadow-xl hover:-translate-y-1 hover:scale-105 transition-all duration-300 flex items-center gap-2">
-            <span class="material-icons notranslate">arrow_back</span>목록으로
+            <span class="material-icons notranslate">arrow_back</span><span id="back-btn-label">목록으로</span>
           </button>
         </div>
       </div>
-      <div id="request-detail" class="bg-gradient-to-br from-gray-50 to-blue-50 p-10 rounded-2xl border border-gray-200 shadow-xl text-lg backdrop-blur-sm"></div>
+      <div id="request-detail" class="bg-gradient-to-br from-gray-50 to-blue-50 p-10 rounded-2xl border border-gray-200 shadow-xl text-lg backdrop-blur-sm">
+        <div class="space-y-6">
+          <div class="flex items-start gap-3">
+            <span class="material-icons text-blue-500 mt-1 notranslate">person</span>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">요청자</h3>
+              <p class="text-gray-700" id="detail-requester"></p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="material-icons text-blue-500 mt-1 notranslate">description</span>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">요청사항</h3>
+              <p class="text-gray-700" id="detail-title-txt"></p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="material-icons text-blue-500 mt-1 notranslate">info</span>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">세부사항</h3>
+              <div class="whitespace-pre-wrap text-gray-700 bg-white/50 p-4 rounded-lg border border-gray-200 font-['Pretendard']" id="detail-details"></div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="material-icons text-blue-500 mt-1 notranslate">calendar_today</span>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">등록일</h3>
+              <p class="text-gray-700" id="detail-date"></p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3" id="detail-excel-block" style="display:none;">
+            <span class="material-icons text-green-500 mt-1 notranslate">file_download</span>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">첨부파일</h3>
+              <a id="detail-excel" href="#" download class="text-blue-600 hover:text-blue-800 underline font-medium flex items-center gap-2">
+                <span class="material-icons text-sm notranslate">download</span>
+                <span id="detail-excel-name"></span>
+              </a>
+            </div>
+          </div>
+          <div class="flex items-start gap-3" id="detail-photo-block" style="display:none;">
+            <span class="material-icons text-purple-500 mt-1 notranslate">image</span>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">사진</h3>
+              <img id="detail-photo" src="" class="max-w-64 max-h-48 rounded-xl border border-gray-300 shadow-lg mt-2">
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
-  
   <!-- 담당자 연락처 봇 -->
   <div id="contact-bot" class="fixed bottom-6 right-6 z-50">
     <!-- 봇 버튼 -->
@@ -139,7 +179,6 @@
         <span class="material-icons text-sm notranslate">phone</span>
       </div>
     </button>
-    
     <!-- 연락처 팝업 -->
     <div id="contact-popup" class="absolute bottom-16 right-0 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 opacity-0 pointer-events-none transform translate-y-4 scale-95 transition-all duration-300 ease-out">
       <!-- 헤더 -->
@@ -148,8 +187,8 @@
           <div class="flex items-center gap-3">
             <span class="material-icons text-2xl notranslate">support_agent</span>
             <div>
-              <h3 class="font-bold text-lg">담당자 연락처</h3>
-              <p class="text-blue-100 text-sm">Contact Information</p>
+              <h3 id="contact-title" class="font-bold text-lg">담당자 연락처</h3>
+              <p id="contact-title-en" class="text-blue-100 text-sm">Contact Information</p>
             </div>
           </div>
           <button id="close-contact" class="text-white/80 hover:text-white transition-colors">
@@ -157,7 +196,6 @@
           </button>
         </div>
       </div>
-      
       <!-- 연락처 내용 -->
       <div class="p-6 space-y-4 max-h-96 overflow-y-auto">
         <!-- 박효진 대리 -->
@@ -165,25 +203,24 @@
           <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl mb-3">
             <span class="material-icons text-blue-500 mt-1 notranslate">person</span>
             <div>
-              <h4 class="font-bold text-gray-900">박효진 대리</h4>
-              <p class="text-gray-600 text-sm">HyoJin Park</p>
-              <p class="text-gray-700">영업본부 SCM팀 (PM)</p>
+              <h4 id="contact1-name" class="font-bold text-gray-900">박효진 대리</h4>
+              <p id="contact1-en" class="text-gray-600 text-sm">HyoJin Park</p>
+              <p id="contact1-team" class="text-gray-700">영업본부 SCM팀 (PM)</p>
             </div>
           </div>
-          
           <div class="space-y-2 text-sm">
             <div class="flex items-start gap-2">
               <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">location_on</span>
               <div>
-                <p class="font-medium text-gray-900">본사</p>
-                <p class="text-gray-600">(05637) 서울특별시 송파구 위례성대로12길5 아이베빌딩 2층</p>
+                <p class="font-medium text-gray-900" id="contact1-hq">본사</p>
+                <p class="text-gray-600" id="contact1-hq-addr">(05637) 서울특별시 송파구 위례성대로12길5 아이베빌딩 2층</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
               <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">warehouse</span>
               <div>
-                <p class="font-medium text-gray-900">제1물류센터</p>
-                <p class="text-gray-600">(12021) 경기도 남양주시 진접읍 경복대로 512번길 7-1</p>
+                <p class="font-medium text-gray-900" id="contact1-wh">제1물류센터</p>
+                <p class="text-gray-600" id="contact1-wh-addr">(12021) 경기도 남양주시 진접읍 경복대로 512번길 7-1</p>
               </div>
             </div>
             <div class="flex items-center gap-2">
@@ -200,38 +237,36 @@
             </div>
           </div>
         </div>
-
         <!-- 박민찬 주임 -->
         <div class="border-b border-gray-200 pb-4">
           <div class="flex items-start gap-3 p-3 bg-green-50 rounded-xl mb-3">
             <span class="material-icons text-green-500 mt-1 notranslate">engineering</span>
             <div>
-              <h4 class="font-bold text-gray-900">박민찬 주임</h4>
-              <p class="text-gray-600 text-sm">MINCHAN PARK</p>
-              <p class="text-gray-700">브랜드사업부 SCM팀 (기술)</p>
+              <h4 id="contact2-name" class="font-bold text-gray-900">박민찬 주임</h4>
+              <p id="contact2-en" class="text-gray-600 text-sm">MINCHAN PARK</p>
+              <p id="contact2-team" class="text-gray-700">브랜드사업부 SCM팀 (기술)</p>
             </div>
           </div>
-          
           <div class="space-y-2 text-sm">
             <div class="flex items-start gap-2">
               <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">location_on</span>
               <div>
-                <p class="font-medium text-gray-900">본사</p>
-                <p class="text-gray-600">(05637) 서울특별시 송파구 위례성대로12길5 아이베빌딩 4층</p>
+                <p class="font-medium text-gray-900" id="contact2-hq">본사</p>
+                <p class="text-gray-600" id="contact2-hq-addr">(05637) 서울특별시 송파구 위례성대로12길5 아이베빌딩 4층</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
               <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">warehouse</span>
               <div>
-                <p class="font-medium text-gray-900">제1물류센터</p>
-                <p class="text-gray-600">(12021) 경기도 남양주시 진접읍 경복대로 512번길 7-1</p>
+                <p class="font-medium text-gray-900" id="contact2-wh">제1물류센터</p>
+                <p class="text-gray-600" id="contact2-wh-addr">(12021) 경기도 남양주시 진접읍 경복대로 512번길 7-1</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
               <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">warehouse</span>
               <div>
-                <p class="font-medium text-gray-900">제2물류센터</p>
-                <p class="text-gray-600">(17090) 경기도 용인시 처인구 삼가동 146-15</p>
+                <p class="font-medium text-gray-900" id="contact2-wh2">제2물류센터</p>
+                <p class="text-gray-600" id="contact2-wh2-addr">(17090) 경기도 용인시 처인구 삼가동 146-15</p>
               </div>
             </div>
             <div class="flex items-center gap-2">
@@ -248,24 +283,22 @@
             </div>
           </div>
         </div>
-
         <!-- 지윤환 과장 -->
         <div class="pb-4">
           <div class="flex items-start gap-3 p-3 bg-orange-50 rounded-xl mb-3">
             <span class="material-icons text-orange-500 mt-1 notranslate">support_agent</span>
             <div>
-              <h4 class="font-bold text-gray-900">지윤환 과장</h4>
-              <p class="text-gray-600 text-sm">Jiyunhwan</p>
-              <p class="text-gray-700">전략기획실 (Support)</p>
+              <h4 id="contact3-name" class="font-bold text-gray-900">지윤환 과장</h4>
+              <p id="contact3-en" class="text-gray-600 text-sm">Jiyunhwan</p>
+              <p id="contact3-team" class="text-gray-700">전략기획실 (Support)</p>
             </div>
           </div>
-          
           <div class="space-y-2 text-sm">
             <div class="flex items-start gap-2">
               <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">location_on</span>
               <div>
-                <p class="font-medium text-gray-900">본사</p>
-                <p class="text-gray-600">서울특별시 송파구 위례성대로12길5 아이베빌딩 2F</p>
+                <p class="font-medium text-gray-900" id="contact3-hq">본사</p>
+                <p class="text-gray-600" id="contact3-hq-addr">서울특별시 송파구 위례성대로12길5 아이베빌딩 2F</p>
               </div>
             </div>
             <div class="flex items-center gap-2">
@@ -281,7 +314,6 @@
       </div>
     </div>
   </div>
-  
   <script src="script.js"></script>
 </body>
 </html> 
