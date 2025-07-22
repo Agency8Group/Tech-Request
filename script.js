@@ -67,6 +67,12 @@ const translations = {
     'list-requester-req_3': '지윤환',
     'list-title-req_3': '대시보드 개선 요청',
     'list-date-req_3': '2024-06-02',
+    'detail-requester-label': '요청자',
+    'detail-title-label': '요청사항',
+    'detail-details-label': '세부사항',
+    'detail-date-label': '등록일',
+    'detail-excel-label': '첨부파일',
+    'detail-photo-label': '사진',
   },
   zh_CN: {
     'title-text': 'EIBE 技术请求查看器',
@@ -132,6 +138,12 @@ const translations = {
     'list-requester-req_3': '池允焕',
     'list-title-req_3': '仪表盘改善请求',
     'list-date-req_3': '2024-06-02',
+    'detail-requester-label': '请求人',
+    'detail-title-label': '请求事项',
+    'detail-details-label': '详细内容',
+    'detail-date-label': '登记日',
+    'detail-excel-label': '附件',
+    'detail-photo-label': '照片',
   },
   zh_TW: {
     'title-text': 'EIBE 技術請求檢視器',
@@ -197,6 +209,12 @@ const translations = {
     'list-requester-req_3': '池允煥',
     'list-title-req_3': '儀表板改善請求',
     'list-date-req_3': '2024-06-02',
+    'detail-requester-label': '請求人',
+    'detail-title-label': '請求事項',
+    'detail-details-label': '詳細內容',
+    'detail-date-label': '登記日',
+    'detail-excel-label': '附件',
+    'detail-photo-label': '照片',
   }
 };
 
@@ -204,7 +222,8 @@ function setLanguage(lang) {
   const dict = translations[lang];
   if (!dict) return;
   Object.keys(dict).forEach(id => {
-    // 요청자 이름(목록, 상세)과 고객센터 담당자 이름은 항상 한글로
+    // 요청자 이름(목록, 상세)과 고객센터 담당자 이름은 항상 한글로 고정
+    // (이름 옆에는 무조건 이름은 한글로 한다)
     if (
       id.startsWith('list-requester-') ||
       id.startsWith('detail-requester-') ||
@@ -212,10 +231,9 @@ function setLanguage(lang) {
       id === 'contact2-name' ||
       id === 'contact3-name'
     ) {
-      // 한글 값만 적용
       const el = document.getElementById(id);
       if (el && translations.ko[id]) {
-        el.textContent = translations.ko[id];
+        el.textContent = translations.ko[id]; // 이름은 무조건 한글로 한다
       }
     } else {
       const el = document.getElementById(id);
@@ -228,12 +246,7 @@ function setLanguage(lang) {
     const requesterEl = document.getElementById('detail-requester');
     if (requesterEl && requesterEl.dataset.reqId) {
       const reqId = requesterEl.dataset.reqId;
-      // 요청자 이름은 한글로 고정
-      const el = document.getElementById('detail-requester');
-      if (el && translations.ko[`detail-requester-${reqId}`]) {
-        el.textContent = translations.ko[`detail-requester-${reqId}`];
-      }
-      ['detail-title-txt', 'detail-details', 'detail-date'].forEach(baseId => {
+      ['detail-requester', 'detail-title-txt', 'detail-details', 'detail-date'].forEach(baseId => {
         const el = document.getElementById(baseId);
         if (el && translations[lang][`${baseId}-${reqId}`]) {
           el.textContent = translations[lang][`${baseId}-${reqId}`];
@@ -244,12 +257,7 @@ function setLanguage(lang) {
   // 요청서 목록(리스트)도 번역
   if (typeof requests !== 'undefined') {
     requests.forEach(req => {
-      // 요청자 이름은 한글로 고정
-      const el = document.getElementById(`list-requester-${req.id}`);
-      if (el && translations.ko[`list-requester-${req.id}`]) {
-        el.textContent = translations.ko[`list-requester-${req.id}`];
-      }
-      ['list-title', 'list-date'].forEach(type => {
+      ['list-requester', 'list-title', 'list-date'].forEach(type => {
         const el = document.getElementById(`${type}-${req.id}`);
         if (el && translations[lang][`${type}-${req.id}`]) {
           el.textContent = translations[lang][`${type}-${req.id}`];
@@ -301,14 +309,16 @@ const backBtn = document.getElementById('back-btn');
 
 function renderList() {
   requestListTbody.innerHTML = '';
+  // 현재 언어 추적 (window.currentLang 또는 기본 zh_CN)
+  const lang = window.currentLang || 'zh_CN';
   requests.forEach((req, idx) => {
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-100';
     tr.innerHTML = `
       <td class="px-6 py-5 text-center align-middle font-medium text-gray-700">${idx + 1}</td>
-      <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-requester-${req.id}">${req.requester}</td>
-      <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-title-${req.id}">${req.title}</td>
-      <td class="px-6 py-5 text-center align-middle font-medium text-gray-600" id="list-date-${req.id}">${req.date}</td>
+      <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-requester-${req.id}">${translations.ko[`list-requester-${req.id}`] || req.requester}</td>
+      <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-title-${req.id}">${translations[lang][`list-title-${req.id}`] || req.title}</td>
+      <td class="px-6 py-5 text-center align-middle font-medium text-gray-600" id="list-date-${req.id}">${translations[lang][`list-date-${req.id}`] || req.date}</td>
       <td class="px-6 py-5 text-center align-middle">
         <button onclick="showDetail('${req.id}')" class="group relative bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-6 py-2.5 rounded-2xl cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 ease-out overflow-hidden">
           <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -321,7 +331,6 @@ function renderList() {
     `;
     requestListTbody.appendChild(tr);
   });
-  
   // 요청서 개수 업데이트
   const requestCount = document.getElementById('request-count');
   if (requestCount) {
@@ -356,20 +365,22 @@ function showDetail(id) {
   const titleEl = document.getElementById('detail-title-txt');
   const detailsEl = document.getElementById('detail-details');
   const dateEl = document.getElementById('detail-date');
+  // 현재 언어 추적 (window.currentLang 또는 기본 zh_CN)
+  const lang = window.currentLang || 'zh_CN';
   if (requesterEl) {
-    requesterEl.textContent = req.requester;
+    requesterEl.textContent = translations.ko[`detail-requester-${id}`] || req.requester;
     requesterEl.dataset.reqId = id;
   }
   if (titleEl) {
-    titleEl.textContent = req.title;
+    titleEl.textContent = translations[lang][`detail-title-txt-${id}`] || req.title;
     titleEl.dataset.reqId = id;
   }
   if (detailsEl) {
-    detailsEl.textContent = req.details;
+    detailsEl.textContent = translations[lang][`detail-details-${id}`] || req.details;
     detailsEl.dataset.reqId = id;
   }
   if (dateEl) {
-    dateEl.textContent = req.date;
+    dateEl.textContent = translations[lang][`detail-date-${id}`] || req.date;
     dateEl.dataset.reqId = id;
   }
   // 첨부파일
@@ -424,6 +435,7 @@ document.addEventListener('click', (e) => {
 fetchData().then(data => {
   requests = data;
   showList();
+  setLanguage('zh_CN'); // 첫 진입시 중국어(간체)로 고정
 });
 
 // 콘솔에서 직접 데이터 추가/수정/삭제할 수 있는 함수
