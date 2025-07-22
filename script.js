@@ -35,7 +35,7 @@ function translateToKorean() {
 function showTranslationGuide(targetLanguage) {
   let message = '';
   
-  if (targetLanguage.includes('중국어') || targetLanguage.includes('简体') || targetLanguage.includes('繁體')) {
+  if (targetLanguage.includes('중국어') || targetLanguage.includes('简体') || targetLanguage.includes('繁體')) 
     message = `
 🇨🇳 中国开发团队专用 - 翻译指南
 
@@ -175,7 +175,7 @@ function showDetail(id) {
         <span class="material-icons text-blue-500 mt-1 notranslate">person</span>
         <div>
           <h3 class="font-bold text-gray-900 mb-1">요청자</h3>
-          <p class="text-gray-700">${req.requester}</p>
+          <p class="text-gray-700 translate">${req.requester}</p>
         </div>
       </div>
       
@@ -183,7 +183,7 @@ function showDetail(id) {
         <span class="material-icons text-blue-500 mt-1 notranslate">description</span>
         <div>
           <h3 class="font-bold text-gray-900 mb-1">요청사항</h3>
-          <p class="text-gray-700">${req.title}</p>
+          <p class="text-gray-700 translate">${req.title}</p>
         </div>
       </div>
       
@@ -191,7 +191,7 @@ function showDetail(id) {
         <span class="material-icons text-blue-500 mt-1 notranslate">info</span>
         <div>
           <h3 class="font-bold text-gray-900 mb-1">세부사항</h3>
-          <div class="whitespace-pre-wrap text-gray-700 bg-white/50 p-4 rounded-lg border border-gray-200 font-['Pretendard']">${req.details}</div>
+          <div class="whitespace-pre-wrap text-gray-700 bg-white/50 p-4 rounded-lg border border-gray-200 font-['Pretendard'] translate">${req.details}</div>
         </div>
       </div>
       
