@@ -79,7 +79,7 @@ function fetchData() {
   return Promise.resolve([
     {
       id: 'req_1',
-      requester: '홍길동',
+      requester: '박효진',
       title: '센서 데이터 자동수집 기능 추가',
       details: '센서에서 발생하는 데이터를 자동으로 수집하여 엑셀로 저장하는 기능 요청',
       excelName: 'sensor_data.xlsx',
@@ -88,8 +88,17 @@ function fetchData() {
     },
     {
       id: 'req_2',
-      requester: '김영희',
+      requester: '박민찬',
       title: 'UI 개선 요청',
+      details: '메인화면 버튼 크기 확대 및 색상 변경 요청',
+      excelName: 'ui_design.xlsx',
+      photoName: 'ui_sample.png',
+      date: '2024-06-02'
+    },
+    {
+      id: 'req_3',
+      requester: '지윤환',
+      title: '대시보드 개선 요청',
       details: '메인화면 버튼 크기 확대 및 색상 변경 요청',
       excelName: 'ui_design.xlsx',
       photoName: 'ui_sample.png',

@@ -14,8 +14,10 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="font-['Pretendard'] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 m-0 p-0 min-h-screen">
-  <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-12 pb-8 text-center mb-12 rounded-b-3xl shadow-2xl relative overflow-hidden">
+  <header class="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white py-16 pb-12 text-center mb-16 rounded-b-4xl shadow-2xl relative overflow-hidden">
+    <!-- 배경 패턴 -->
     <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
     
     <!-- 번역 버튼들 -->
     <div class="absolute top-4 right-6 flex gap-2 z-20">
@@ -34,9 +36,37 @@
     </div>
     
     <div class="relative z-10">
-      <h1 class="text-4xl font-bold mb-2">eibe 전산개발 기술요청서 뷰어</h1>
-      <p class="text-blue-100 text-lg">동수 개발사 참고용</p>
-      <div class="h-1 w-20 bg-white mx-auto mt-6 rounded-full shadow-lg"></div>
+      <div class="mb-6">
+        <div class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 mb-6">
+          <span class="material-icons text-blue-200 notranslate">code</span>
+          <span class="text-blue-100 font-medium">Technical Request Viewer</span>
+        </div>
+      </div>
+      
+      <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">
+        EIBE 전산개발 기술요청서 뷰어
+      </h1>
+      
+      <p class="text-blue-100 text-xl font-medium mb-8">동수 개발사 참고용</p>
+      
+      <div class="flex items-center justify-center gap-8 mb-8">
+        <div class="flex items-center gap-2 text-blue-200">
+          <span class="material-icons text-sm notranslate">developer_mode</span>
+          <span class="text-sm">개발 참고용</span>
+        </div>
+        <div class="w-px h-4 bg-blue-300/50"></div>
+        <div class="flex items-center gap-2 text-blue-200">
+          <span class="material-icons text-sm notranslate">description</span>
+          <span class="text-sm">기술 요청서</span>
+        </div>
+        <div class="w-px h-4 bg-blue-300/50"></div>
+        <div class="flex items-center gap-2 text-blue-200">
+          <span class="material-icons text-sm notranslate">handshake</span>
+          <span class="text-sm">협업 도구</span>
+        </div>
+      </div>
+      
+      <div class="h-1 w-32 bg-gradient-to-r from-transparent via-white to-transparent mx-auto rounded-full shadow-lg"></div>
     </div>
   </header>
   <main class="max-w-7xl mx-auto bg-white/80 backdrop-blur-sm p-12 pb-16 rounded-3xl shadow-2xl border border-white/20">
