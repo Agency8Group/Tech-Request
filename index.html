@@ -67,10 +67,22 @@
       </div>
       
       <div class="relative">
-        <div class="h-1 w-32 bg-gradient-to-r from-transparent via-white to-transparent mx-auto rounded-full shadow-lg animate-pulse"></div>
-        <div class="absolute inset-0 h-1 w-32 bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto rounded-full animate-ping"></div>
-        <div class="absolute inset-0 h-1 w-32 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+        <div class="h-1 w-48 bg-gradient-to-r from-transparent via-white to-transparent mx-auto rounded-full shadow-lg" style="animation: slowPulse 3s ease-in-out infinite;"></div>
+        <div class="absolute inset-0 h-1 w-48 bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto rounded-full" style="animation: slowPing 4s ease-in-out infinite;"></div>
+        <div class="absolute inset-0 h-1 w-48 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full" style="animation: slowPulse 3s ease-in-out infinite; animation-delay: 1.5s;"></div>
       </div>
+      
+      <style>
+        @keyframes slowPulse {
+          0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
+          50% { opacity: 1; transform: scaleX(1.2); }
+        }
+        @keyframes slowPing {
+          0% { opacity: 0.8; transform: scaleX(1); }
+          50% { opacity: 0.2; transform: scaleX(1.5); }
+          100% { opacity: 0; transform: scaleX(2); }
+        }
+      </style>
     </div>
   </header>
   <main class="max-w-7xl mx-auto bg-white/80 backdrop-blur-sm p-12 pb-16 rounded-3xl shadow-2xl border border-white/20">
