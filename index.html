@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="EIBE 기술요청서 관리 시스템 - 技术请求管理系统">
+  <meta name="keywords" content="기술요청서,技术请求,개발요청,开发请求,전산개발,系统开发">
+  <title>EIBE 기술요청서 뷰어 - 技术请求查看器</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="font-['Pretendard'] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 m-0 p-0 min-h-screen">
+  <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-12 pb-8 text-center mb-12 rounded-b-3xl shadow-2xl relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+    
+    <!-- 번역 버튼들 -->
+    <div class="absolute top-4 right-6 flex gap-2 z-20">
+      <button onclick="translateToSimplifiedChinese()" title="简体中文翻译 - 간체 중국어 번역" class="bg-white/20 backdrop-blur-sm text-white border border-white/30 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
+        <span class="text-xs">🇨🇳</span>
+        简体中文
+      </button>
+      <button onclick="translateToTraditionalChinese()" title="繁體中文翻譯 - 번체 중국어 번역" class="bg-white/20 backdrop-blur-sm text-white border border-white/30 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
+        <span class="text-xs">🇹🇼</span>
+        繁體中文
+      </button>
+      <button onclick="translateToKorean()" title="한국어로 복원 - 恢复韩语" class="bg-white/30 backdrop-blur-sm text-white border border-white/50 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/40 transition-all duration-200 flex items-center gap-1">
+        <span class="text-xs">🇰🇷</span>
+        한국어
+      </button>
+    </div>
+    
+    <div class="relative z-10">
+      <h1 class="text-4xl font-bold mb-2">eibe 전산개발 기술요청서 뷰어</h1>
+      <p class="text-blue-100 text-lg">동수 개발사 참고용.(회의록 기술요청서)</p>
+      <div class="h-1 w-20 bg-white mx-auto mt-6 rounded-full shadow-lg"></div>
+      
+      <!-- 중국 개발사를 위한 친절한 안내 -->
+      <div class="mt-6 bg-white/10 backdrop-blur-sm rounded-xl p-4 max-w-2xl mx-auto border border-white/20">
+        <p class="text-blue-50 text-sm mb-2">🇨🇳 中国开发团队专用 / 中国开发团队专用</p>
+        <p class="text-blue-100 text-xs">위 버튼을 클릭하시면 자동으로 중국어로 번역됩니다. 点击上方按钮可自动翻译成中文。</p>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-7xl mx-auto bg-white/80 backdrop-blur-sm p-12 pb-16 rounded-3xl shadow-2xl border border-white/20">
+    <section id="request-list-section">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-2">요청서 목록</h2>
+          <p class="text-gray-600">등록된 기술 요청사항을 확인하세요</p>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-500">
+          <span class="material-icons text-blue-500 notranslate">info</span>
+          총 <span id="request-count" class="font-semibold text-blue-600">0</span>건
+        </div>
+      </div>
+      <div class="overflow-hidden rounded-2xl shadow-xl border border-gray-100">
+        <table id="request-list" class="w-full border-collapse bg-white">
+          <thead>
+            <tr class="bg-gradient-to-r from-gray-50 to-blue-50">
+              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">번호</th>
+              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">요청자</th>
+              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">요청사항</th>
+              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">등록일</th>
+              <th class="px-6 py-5 text-center text-gray-700 font-bold border-b border-gray-200">상세보기</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- JS로 데이터 렌더링 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section id="request-detail-section" class="hidden opacity-0 translate-y-10 pointer-events-none transition-all duration-500 ease-out">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-2">요청서 상세</h2>
+          <p class="text-gray-600">요청사항의 자세한 내용을 확인하세요</p>
+        </div>
+        <div class="flex justify-end gap-3">
+          <button id="back-btn" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-none px-8 py-3 rounded-xl cursor-pointer font-bold shadow-lg hover:from-blue-600 hover:to-indigo-600 hover:shadow-xl hover:-translate-y-1 hover:scale-105 transition-all duration-300 flex items-center gap-2">
+            <span class="material-icons notranslate">arrow_back</span>목록으로
+          </button>
+        </div>
+      </div>
+      <div id="request-detail" class="bg-gradient-to-br from-gray-50 to-blue-50 p-10 rounded-2xl border border-gray-200 shadow-xl text-lg backdrop-blur-sm"></div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html> 
