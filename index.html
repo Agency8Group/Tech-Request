@@ -35,18 +35,12 @@
     
     <div class="relative z-10">
       <h1 class="text-4xl font-bold mb-2">eibe 전산개발 기술요청서 뷰어</h1>
-      <p class="text-blue-100 text-lg">동수 개발사 참고용.(회의록 기술요청서)</p>
+      <p class="text-blue-100 text-lg">동수 개발사 참고용</p>
       <div class="h-1 w-20 bg-white mx-auto mt-6 rounded-full shadow-lg"></div>
-      
-      <!-- 중국 개발사를 위한 친절한 안내 -->
-      <div class="mt-6 bg-white/10 backdrop-blur-sm rounded-xl p-4 max-w-2xl mx-auto border border-white/20">
-        <p class="text-blue-50 text-sm mb-2">🇨🇳 中国开发团队专用 / 中国开发团队专用</p>
-        <p class="text-blue-100 text-xs">위 버튼을 클릭하시면 자동으로 중국어로 번역됩니다. 点击上方按钮可自动翻译成中文。</p>
-      </div>
     </div>
   </header>
   <main class="max-w-7xl mx-auto bg-white/80 backdrop-blur-sm p-12 pb-16 rounded-3xl shadow-2xl border border-white/20">
-    <section id="request-list-section">
+    <section id="request-list-section" class="opacity-100 translate-y-0 transition-all duration-500 ease-out">
       <div class="flex items-center justify-between mb-8">
         <div>
           <h2 class="text-3xl font-extrabold text-gray-900 mb-2">요청서 목록</h2>
@@ -89,6 +83,159 @@
       <div id="request-detail" class="bg-gradient-to-br from-gray-50 to-blue-50 p-10 rounded-2xl border border-gray-200 shadow-xl text-lg backdrop-blur-sm"></div>
     </section>
   </main>
+  
+  <!-- 담당자 연락처 봇 -->
+  <div id="contact-bot" class="fixed bottom-6 right-6 z-50">
+    <!-- 봇 버튼 -->
+    <button id="contact-bot-btn" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group">
+      <span class="material-icons text-2xl notranslate">support_agent</span>
+      <div class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center animate-pulse">
+        <span class="material-icons text-sm notranslate">phone</span>
+      </div>
+    </button>
+    
+    <!-- 연락처 팝업 -->
+    <div id="contact-popup" class="absolute bottom-16 right-0 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 opacity-0 pointer-events-none transform translate-y-4 scale-95 transition-all duration-300 ease-out">
+      <!-- 헤더 -->
+      <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-t-2xl">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="material-icons text-2xl notranslate">support_agent</span>
+            <div>
+              <h3 class="font-bold text-lg">담당자 연락처</h3>
+              <p class="text-blue-100 text-sm">Contact Information</p>
+            </div>
+          </div>
+          <button id="close-contact" class="text-white/80 hover:text-white transition-colors">
+            <span class="material-icons notranslate">close</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- 연락처 내용 -->
+      <div class="p-6 space-y-4 max-h-96 overflow-y-auto">
+        <!-- 박효진 대리 -->
+        <div class="border-b border-gray-200 pb-4">
+          <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl mb-3">
+            <span class="material-icons text-blue-500 mt-1 notranslate">person</span>
+            <div>
+              <h4 class="font-bold text-gray-900">박효진 대리</h4>
+              <p class="text-gray-600 text-sm">HyoJin Park</p>
+              <p class="text-gray-700">영업본부 SCM팀 (PM)</p>
+            </div>
+          </div>
+          
+          <div class="space-y-2 text-sm">
+            <div class="flex items-start gap-2">
+              <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">location_on</span>
+              <div>
+                <p class="font-medium text-gray-900">본사</p>
+                <p class="text-gray-600">(05637) 서울특별시 송파구 위례성대로12길5 아이베빌딩 2층</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">warehouse</span>
+              <div>
+                <p class="font-medium text-gray-900">제1물류센터</p>
+                <p class="text-gray-600">(12021) 경기도 남양주시 진접읍 경복대로 512번길 7-1</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-green-500 text-sm notranslate">phone_android</span>
+              <a href="tel:010-4417-0648" class="text-blue-600 hover:text-blue-800">010-4417-0648</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-blue-500 text-sm notranslate">phone</span>
+              <a href="tel:070-4349-2174" class="text-blue-600 hover:text-blue-800">070-4349-2174</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-purple-500 text-sm notranslate">email</span>
+              <a href="mailto:park_hj@eibe.co.kr" class="text-blue-600 hover:text-blue-800">park_hj@eibe.co.kr</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 박민찬 주임 -->
+        <div class="border-b border-gray-200 pb-4">
+          <div class="flex items-start gap-3 p-3 bg-green-50 rounded-xl mb-3">
+            <span class="material-icons text-green-500 mt-1 notranslate">engineering</span>
+            <div>
+              <h4 class="font-bold text-gray-900">박민찬 주임</h4>
+              <p class="text-gray-600 text-sm">MINCHAN PARK</p>
+              <p class="text-gray-700">브랜드사업부 SCM팀 (기술)</p>
+            </div>
+          </div>
+          
+          <div class="space-y-2 text-sm">
+            <div class="flex items-start gap-2">
+              <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">location_on</span>
+              <div>
+                <p class="font-medium text-gray-900">본사</p>
+                <p class="text-gray-600">(05637) 서울특별시 송파구 위례성대로12길5 아이베빌딩 4층</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">warehouse</span>
+              <div>
+                <p class="font-medium text-gray-900">제1물류센터</p>
+                <p class="text-gray-600">(12021) 경기도 남양주시 진접읍 경복대로 512번길 7-1</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">warehouse</span>
+              <div>
+                <p class="font-medium text-gray-900">제2물류센터</p>
+                <p class="text-gray-600">(17090) 경기도 용인시 처인구 삼가동 146-15</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-green-500 text-sm notranslate">phone_android</span>
+              <a href="tel:010-4269-6022" class="text-blue-600 hover:text-blue-800">010-4269-6022</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-blue-500 text-sm notranslate">phone</span>
+              <a href="tel:031-528-1583" class="text-blue-600 hover:text-blue-800">031-528-1583</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-purple-500 text-sm notranslate">email</span>
+              <a href="mailto:pophop22@eibe.co.kr" class="text-blue-600 hover:text-blue-800">pophop22@eibe.co.kr</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 지윤환 과장 -->
+        <div class="pb-4">
+          <div class="flex items-start gap-3 p-3 bg-orange-50 rounded-xl mb-3">
+            <span class="material-icons text-orange-500 mt-1 notranslate">support_agent</span>
+            <div>
+              <h4 class="font-bold text-gray-900">지윤환 과장</h4>
+              <p class="text-gray-600 text-sm">Jiyunhwan</p>
+              <p class="text-gray-700">전략기획실 (Support)</p>
+            </div>
+          </div>
+          
+          <div class="space-y-2 text-sm">
+            <div class="flex items-start gap-2">
+              <span class="material-icons text-gray-500 text-sm mt-0.5 notranslate">location_on</span>
+              <div>
+                <p class="font-medium text-gray-900">본사</p>
+                <p class="text-gray-600">서울특별시 송파구 위례성대로12길5 아이베빌딩 2F</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-green-500 text-sm notranslate">phone_android</span>
+              <a href="tel:010-5871-7232" class="text-blue-600 hover:text-blue-800">010-5871-7232</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-icons text-purple-500 text-sm notranslate">email</span>
+              <a href="mailto:jyh@eibe.co.kr" class="text-blue-600 hover:text-blue-800">jyh@eibe.co.kr</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <script src="script.js"></script>
 </body>
 </html> 

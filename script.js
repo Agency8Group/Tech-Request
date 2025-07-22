@@ -115,8 +115,12 @@ function renderList() {
       <td class="px-6 py-5 text-center align-middle font-medium text-gray-700">${req.title}</td>
       <td class="px-6 py-5 text-center align-middle font-medium text-gray-600">${req.date}</td>
       <td class="px-6 py-5 text-center align-middle">
-        <button onclick="showDetail('${req.id}')" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-none px-6 py-2.5 rounded-xl cursor-pointer font-bold shadow-lg hover:from-blue-600 hover:to-indigo-600 hover:shadow-xl hover:-translate-y-1 hover:scale-105 transition-all duration-300">
-          보기
+        <button onclick="showDetail('${req.id}')" class="group relative bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-6 py-2.5 rounded-2xl cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 ease-out overflow-hidden">
+          <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+          <span class="relative flex items-center gap-1.5">
+            <span class="material-icons text-sm notranslate">visibility</span>
+            보기
+          </span>
         </button>
       </td>
     `;
@@ -135,14 +139,25 @@ function showList() {
   setTimeout(() => {
     detailSection.classList.add('hidden');
     listSection.classList.remove('hidden');
+    // 리스트 섹션도 부드럽게 나타나도록
+    setTimeout(() => {
+      listSection.classList.add('opacity-100', 'translate-y-0');
+      listSection.classList.remove('opacity-0', 'translate-y-10');
+    }, 50);
     renderList();
   }, 450);
 }
 function showDetail(id) {
-  listSection.classList.add('hidden');
-  detailSection.classList.remove('hidden');
-  detailSection.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-  detailSection.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+  // 리스트 섹션을 부드럽게 사라지게
+  listSection.classList.add('opacity-0', 'translate-y-10');
+  listSection.classList.remove('opacity-100', 'translate-y-0');
+  
+  setTimeout(() => {
+    listSection.classList.add('hidden');
+    detailSection.classList.remove('hidden');
+    detailSection.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+    detailSection.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+  }, 300);
   
   const req = requests.find(r => r.id === id);
   let html = `
@@ -167,7 +182,7 @@ function showDetail(id) {
         <span class="material-icons text-blue-500 mt-1 notranslate">info</span>
         <div>
           <h3 class="font-bold text-gray-900 mb-1">세부사항</h3>
-          <pre class="whitespace-pre-wrap text-gray-700 bg-white/50 p-4 rounded-lg border border-gray-200">${req.details}</pre>
+          <div class="whitespace-pre-wrap text-gray-700 bg-white/50 p-4 rounded-lg border border-gray-200 font-['Pretendard']">${req.details}</div>
         </div>
       </div>
       
@@ -208,6 +223,37 @@ function showDetail(id) {
   detailDiv.innerHTML = html;
 }
 backBtn.onclick = () => showList();
+
+// 담당자 연락처 봇 기능
+const contactBotBtn = document.getElementById('contact-bot-btn');
+const contactPopup = document.getElementById('contact-popup');
+const closeContact = document.getElementById('close-contact');
+
+function toggleContactPopup() {
+  const isOpen = contactPopup.classList.contains('opacity-100');
+  
+  if (isOpen) {
+    // 닫기
+    contactPopup.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0', 'scale-100');
+    contactPopup.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4', 'scale-95');
+  } else {
+    // 열기
+    contactPopup.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4', 'scale-95');
+    contactPopup.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0', 'scale-100');
+  }
+}
+
+contactBotBtn.addEventListener('click', toggleContactPopup);
+closeContact.addEventListener('click', toggleContactPopup);
+
+// 팝업 외부 클릭 시 닫기
+document.addEventListener('click', (e) => {
+  if (!contactBotBtn.contains(e.target) && !contactPopup.contains(e.target)) {
+    contactPopup.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0', 'scale-100');
+    contactPopup.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4', 'scale-95');
+  }
+});
+
 // 초기화: fetchData로 데이터 받아와서 렌더링
 fetchData().then(data => {
   requests = data;
