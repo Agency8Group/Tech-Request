@@ -66,7 +66,11 @@
         </div>
       </div>
       
-      <div class="h-1 w-32 bg-gradient-to-r from-transparent via-white to-transparent mx-auto rounded-full shadow-lg"></div>
+      <div class="relative">
+        <div class="h-1 w-32 bg-gradient-to-r from-transparent via-white to-transparent mx-auto rounded-full shadow-lg animate-pulse"></div>
+        <div class="absolute inset-0 h-1 w-32 bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto rounded-full animate-ping"></div>
+        <div class="absolute inset-0 h-1 w-32 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+      </div>
     </div>
   </header>
   <main class="max-w-7xl mx-auto bg-white/80 backdrop-blur-sm p-12 pb-16 rounded-3xl shadow-2xl border border-white/20">
