@@ -368,7 +368,7 @@ function renderList() {
       const card = document.createElement('div');
       card.className = 'bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300';
       card.innerHTML = `
-        <div class="p-4 sm:p-6">
+        <div>
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
               <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm">${idx + 1}</div>
