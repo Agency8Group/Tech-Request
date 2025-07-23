@@ -73,6 +73,8 @@ const translations = {
     'detail-date-label': '등록일',
     'detail-excel-label': '첨부파일',
     'detail-photo-label': '사진',
+    'view-btn-text': '보기',
+    'close-btn-text': '접기',
   },
   zh_CN: {
     'title-text': 'EIBE 技术请求查看器',
@@ -144,6 +146,8 @@ const translations = {
     'detail-date-label': '登记日',
     'detail-excel-label': '附件',
     'detail-photo-label': '照片',
+    'view-btn-text': '查看',
+    'close-btn-text': '收起',
   },
   zh_TW: {
     'title-text': 'EIBE 技術請求檢視器',
@@ -215,10 +219,13 @@ const translations = {
     'detail-date-label': '登記日',
     'detail-excel-label': '附件',
     'detail-photo-label': '照片',
+    'view-btn-text': '檢視',
+    'close-btn-text': '收起',
   }
 };
 
 function setLanguage(lang) {
+  window.currentLang = lang;
   const dict = translations[lang];
   if (!dict) return;
   Object.keys(dict).forEach(id => {
@@ -240,31 +247,23 @@ function setLanguage(lang) {
       if (el) el.textContent = dict[id];
     }
   });
-  // 요청서 상세 내용도 번역
-  const detailSection = document.getElementById('request-detail-section');
-  if (!detailSection.classList.contains('hidden')) {
-    const requesterEl = document.getElementById('detail-requester');
-    if (requesterEl && requesterEl.dataset.reqId) {
-      const reqId = requesterEl.dataset.reqId;
-      ['detail-requester', 'detail-title-txt', 'detail-details', 'detail-date'].forEach(baseId => {
-        const el = document.getElementById(baseId);
-        if (el && translations[lang][`${baseId}-${reqId}`]) {
-          el.textContent = translations[lang][`${baseId}-${reqId}`];
-        }
-      });
+  // 아코디언 내용도 번역
+  requests.forEach(req => {
+    const accordionContent = document.getElementById(`accordion-content-${req.id}`);
+    if (accordionContent) {
+      updateAccordionContent(req.id, lang);
     }
-  }
-  // 요청서 목록(리스트)도 번역
-  if (typeof requests !== 'undefined') {
-    requests.forEach(req => {
-      ['list-requester', 'list-title', 'list-date'].forEach(type => {
-        const el = document.getElementById(`${type}-${req.id}`);
-        if (el && translations[lang][`${type}-${req.id}`]) {
-          el.textContent = translations[lang][`${type}-${req.id}`];
-        }
-      });
-    });
-  }
+    
+    // 버튼 텍스트 번역
+    const viewBtnText = document.getElementById(`view-btn-text-${req.id}`);
+    const mobileViewBtnText = document.getElementById(`mobile-view-btn-text-${req.id}`);
+    if (viewBtnText) {
+      viewBtnText.textContent = dict['view-btn-text'] || '보기';
+    }
+    if (mobileViewBtnText) {
+      mobileViewBtnText.textContent = dict['view-btn-text'] || '보기';
+    }
+  });
 }
 
 // 실제 데이터 연동 시 이 함수만 수정하면 됨
@@ -302,104 +301,258 @@ function fetchData() {
 }
 
 const listSection = document.getElementById('request-list-section');
-const detailSection = document.getElementById('request-detail-section');
-const requestListTbody = document.querySelector('#request-list tbody');
-const detailDiv = document.getElementById('request-detail');
-const backBtn = document.getElementById('back-btn');
+const requestListTbody = document.querySelector('#request-list-desktop tbody');
+const requestListMobile = document.getElementById('request-list-mobile');
 
 function renderList() {
-  requestListTbody.innerHTML = '';
-  // 현재 언어 추적 (window.currentLang 또는 기본 zh_CN)
-  const lang = window.currentLang || 'zh_CN';
-  requests.forEach((req, idx) => {
-    const tr = document.createElement('tr');
-    tr.className = 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-100';
-    tr.innerHTML = `
-      <td class="px-6 py-5 text-center align-middle font-medium text-gray-700">${idx + 1}</td>
-      <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-requester-${req.id}">${translations.ko[`list-requester-${req.id}`] || req.requester}</td>
-      <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-title-${req.id}">${translations[lang][`list-title-${req.id}`] || req.title}</td>
-      <td class="px-6 py-5 text-center align-middle font-medium text-gray-600" id="list-date-${req.id}">${translations[lang][`list-date-${req.id}`] || req.date}</td>
-      <td class="px-6 py-5 text-center align-middle">
-        <button onclick="showDetail('${req.id}')" class="group relative bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-6 py-2.5 rounded-2xl cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 ease-out overflow-hidden">
-          <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          <span class="relative flex items-center gap-1.5">
-            <span class="material-icons text-sm notranslate">visibility</span>
-            보기
-          </span>
-        </button>
-      </td>
-    `;
-    requestListTbody.appendChild(tr);
-  });
+  // 데스크톱 테이블 렌더링
+  if (requestListTbody) {
+    requestListTbody.innerHTML = '';
+    const lang = window.currentLang || 'zh_CN';
+    requests.forEach((req, idx) => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-100';
+      tr.innerHTML = `
+        <td class="px-6 py-5 text-center align-middle font-medium text-gray-700">${idx + 1}</td>
+        <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-requester-${req.id}">${translations.ko[`list-requester-${req.id}`] || req.requester}</td>
+        <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-title-${req.id}">${translations[lang][`list-title-${req.id}`] || req.title}</td>
+        <td class="px-6 py-5 text-center align-middle font-medium text-gray-600" id="list-date-${req.id}">${translations[lang][`list-date-${req.id}`] || req.date}</td>
+        <td class="px-6 py-5 text-center align-middle">
+          <button onclick="toggleAccordion('${req.id}')" class="group relative bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-6 py-2.5 rounded-2xl cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 ease-out overflow-hidden">
+            <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span class="relative flex items-center gap-1.5">
+              <span class="material-icons text-sm notranslate accordion-icon-${req.id}">expand_more</span>
+              <span id="view-btn-text-${req.id}">${translations[lang]['view-btn-text'] || '보기'}</span>
+            </span>
+          </button>
+        </td>
+      `;
+      requestListTbody.appendChild(tr);
+      
+      // 아코디언 행 추가
+      const accordionRow = document.createElement('tr');
+      accordionRow.id = `accordion-row-${req.id}`;
+      accordionRow.className = 'hidden';
+      accordionRow.innerHTML = `
+        <td colspan="5" class="px-0 py-0">
+          <div id="accordion-content-${req.id}" class="bg-gradient-to-br from-gray-50 to-blue-50 p-6 border-t border-gray-200">
+            <!-- 아코디언 내용은 toggleAccordion에서 생성 -->
+          </div>
+        </td>
+      `;
+      requestListTbody.appendChild(accordionRow);
+    });
+  }
+  
+  // 모바일 카드 렌더링
+  if (requestListMobile) {
+    requestListMobile.innerHTML = '';
+    const lang = window.currentLang || 'zh_CN';
+    requests.forEach((req, idx) => {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300';
+      card.innerHTML = `
+        <div class="p-4 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm">${idx + 1}</div>
+              <div>
+                <p class="font-semibold text-gray-900" id="mobile-requester-${req.id}">${translations.ko[`list-requester-${req.id}`] || req.requester}</p>
+                <p class="text-sm text-gray-500" id="mobile-date-${req.id}">${translations[lang][`list-date-${req.id}`] || req.date}</p>
+              </div>
+            </div>
+            <button onclick="toggleMobileAccordion('${req.id}')" class="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-4 py-2 rounded-lg cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 flex items-center gap-1">
+              <span class="material-icons text-sm notranslate mobile-accordion-icon-${req.id}">expand_more</span>
+              <span id="mobile-view-btn-text-${req.id}">${translations[lang]['view-btn-text'] || '보기'}</span>
+            </button>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2" id="mobile-title-${req.id}">${translations[lang][`list-title-${req.id}`] || req.title}</h3>
+          <div id="mobile-accordion-content-${req.id}" class="hidden">
+            <!-- 모바일 아코디언 내용 -->
+          </div>
+        </div>
+      `;
+      requestListMobile.appendChild(card);
+    });
+  }
+  
   // 요청서 개수 업데이트
   const requestCount = document.getElementById('request-count');
   if (requestCount) {
     requestCount.textContent = requests.length;
   }
 }
-function showList() {
-  detailSection.classList.remove('opacity-100', 'translate-y-0');
-  detailSection.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-  setTimeout(() => {
-    detailSection.classList.add('hidden');
-    listSection.classList.remove('hidden');
-    // 리스트 섹션도 부드럽게 나타나도록
-    setTimeout(() => {
-      listSection.classList.add('opacity-100', 'translate-y-0');
-      listSection.classList.remove('opacity-0', 'translate-y-10');
-    }, 50);
-    renderList();
-  }, 450);
-}
-function showDetail(id) {
-  listSection.classList.add('opacity-0', 'translate-y-10');
-  listSection.classList.remove('opacity-100', 'translate-y-0');
-  setTimeout(() => {
-    listSection.classList.add('hidden');
-    detailSection.classList.remove('hidden');
-    detailSection.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-    detailSection.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
-  }, 300);
-  const req = requests.find(r => r.id === id);
-  const requesterEl = document.getElementById('detail-requester');
-  const titleEl = document.getElementById('detail-title-txt');
-  const detailsEl = document.getElementById('detail-details');
-  const dateEl = document.getElementById('detail-date');
-  // 현재 언어 추적 (window.currentLang 또는 기본 zh_CN)
+
+function toggleAccordion(id) {
+  const accordionRow = document.getElementById(`accordion-row-${id}`);
+  const accordionIcon = document.querySelector(`.accordion-icon-${id}`);
+  const viewBtnText = document.getElementById(`view-btn-text-${id}`);
   const lang = window.currentLang || 'zh_CN';
-  if (requesterEl) {
-    requesterEl.textContent = translations.ko[`detail-requester-${id}`] || req.requester;
-    requesterEl.dataset.reqId = id;
-  }
-  if (titleEl) {
-    titleEl.textContent = translations[lang][`detail-title-txt-${id}`] || req.title;
-    titleEl.dataset.reqId = id;
-  }
-  if (detailsEl) {
-    detailsEl.textContent = translations[lang][`detail-details-${id}`] || req.details;
-    detailsEl.dataset.reqId = id;
-  }
-  if (dateEl) {
-    dateEl.textContent = translations[lang][`detail-date-${id}`] || req.date;
-    dateEl.dataset.reqId = id;
-  }
-  // 첨부파일
-  if (req.excelName) {
-    document.getElementById('detail-excel-block').style.display = '';
-    document.getElementById('detail-excel').href = req.excelName;
-    document.getElementById('detail-excel-name').textContent = req.excelName;
+  
+  if (accordionRow.classList.contains('hidden')) {
+    // 열기
+    accordionRow.classList.remove('hidden');
+    accordionIcon.textContent = 'expand_less';
+    viewBtnText.textContent = translations[lang]['close-btn-text'] || '접기';
+    
+    // 아코디언 내용 생성
+    const accordionContent = document.getElementById(`accordion-content-${id}`);
+    if (accordionContent && !accordionContent.hasChildNodes()) {
+      updateAccordionContent(id, lang);
+    }
   } else {
-    document.getElementById('detail-excel-block').style.display = 'none';
-  }
-  // 사진
-  if (req.photoName) {
-    document.getElementById('detail-photo-block').style.display = '';
-    document.getElementById('detail-photo').src = req.photoName;
-  } else {
-    document.getElementById('detail-photo-block').style.display = 'none';
+    // 닫기
+    accordionRow.classList.add('hidden');
+    accordionIcon.textContent = 'expand_more';
+    viewBtnText.textContent = translations[lang]['view-btn-text'] || '보기';
   }
 }
-backBtn.onclick = () => showList();
+
+function toggleMobileAccordion(id) {
+  const accordionContent = document.getElementById(`mobile-accordion-content-${id}`);
+  const accordionIcon = document.querySelector(`.mobile-accordion-icon-${id}`);
+  const viewBtnText = document.getElementById(`mobile-view-btn-text-${id}`);
+  const lang = window.currentLang || 'zh_CN';
+  
+  if (accordionContent.classList.contains('hidden')) {
+    // 열기
+    accordionContent.classList.remove('hidden');
+    accordionIcon.textContent = 'expand_less';
+    viewBtnText.textContent = translations[lang]['close-btn-text'] || '접기';
+    
+    // 아코디언 내용 생성
+    if (!accordionContent.hasChildNodes()) {
+      updateMobileAccordionContent(id, lang);
+    }
+  } else {
+    // 닫기
+    accordionContent.classList.add('hidden');
+    accordionIcon.textContent = 'expand_more';
+    viewBtnText.textContent = translations[lang]['view-btn-text'] || '보기';
+  }
+}
+
+function updateAccordionContent(id, lang) {
+  const req = requests.find(r => r.id === id);
+  const accordionContent = document.getElementById(`accordion-content-${id}`);
+  
+  if (!req || !accordionContent) return;
+  
+  accordionContent.innerHTML = `
+    <div class="space-y-4">
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate">person</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">${translations[lang]['detail-requester-label'] || '요청자'}</h3>
+          <p class="text-gray-700">${translations.ko[`detail-requester-${id}`] || req.requester}</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate">description</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">${translations[lang]['detail-title-label'] || '요청사항'}</h3>
+          <p class="text-gray-700">${translations[lang][`detail-title-txt-${id}`] || req.title}</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate">info</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">${translations[lang]['detail-details-label'] || '세부사항'}</h3>
+          <div class="whitespace-pre-wrap text-gray-700 bg-white/50 p-4 rounded-lg border border-gray-200">${translations[lang][`detail-details-${id}`] || req.details}</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate">calendar_today</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">${translations[lang]['detail-date-label'] || '등록일'}</h3>
+          <p class="text-gray-700">${translations[lang][`detail-date-${id}`] || req.date}</p>
+        </div>
+      </div>
+      ${req.excelName ? `
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-green-500 mt-1 notranslate">file_download</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">${translations[lang]['detail-excel-label'] || '첨부파일'}</h3>
+          <a href="${req.excelName}" download class="text-blue-600 hover:text-blue-800 underline font-medium flex items-center gap-2">
+            <span class="material-icons text-sm notranslate">download</span>
+            <span>${req.excelName}</span>
+          </a>
+        </div>
+      </div>
+      ` : ''}
+      ${req.photoName ? `
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-purple-500 mt-1 notranslate">image</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">${translations[lang]['detail-photo-label'] || '사진'}</h3>
+          <img src="${req.photoName}" class="max-w-64 max-h-48 rounded-xl border border-gray-300 shadow-lg mt-2">
+        </div>
+      </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function updateMobileAccordionContent(id, lang) {
+  const req = requests.find(r => r.id === id);
+  const accordionContent = document.getElementById(`mobile-accordion-content-${id}`);
+  
+  if (!req || !accordionContent) return;
+  
+  accordionContent.innerHTML = `
+    <div class="space-y-4 pt-4 border-t border-gray-200">
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate text-sm">person</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1 text-sm">${translations[lang]['detail-requester-label'] || '요청자'}</h3>
+          <p class="text-gray-700 text-sm">${translations.ko[`detail-requester-${id}`] || req.requester}</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate text-sm">description</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1 text-sm">${translations[lang]['detail-title-label'] || '요청사항'}</h3>
+          <p class="text-gray-700 text-sm">${translations[lang][`detail-title-txt-${id}`] || req.title}</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate text-sm">info</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1 text-sm">${translations[lang]['detail-details-label'] || '세부사항'}</h3>
+          <div class="whitespace-pre-wrap text-gray-700 bg-white/50 p-3 rounded-lg border border-gray-200 text-sm">${translations[lang][`detail-details-${id}`] || req.details}</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-blue-500 mt-1 notranslate text-sm">calendar_today</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1 text-sm">${translations[lang]['detail-date-label'] || '등록일'}</h3>
+          <p class="text-gray-700 text-sm">${translations[lang][`detail-date-${id}`] || req.date}</p>
+        </div>
+      </div>
+      ${req.excelName ? `
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-green-500 mt-1 notranslate text-sm">file_download</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1 text-sm">${translations[lang]['detail-excel-label'] || '첨부파일'}</h3>
+          <a href="${req.excelName}" download class="text-blue-600 hover:text-blue-800 underline font-medium flex items-center gap-2 text-sm">
+            <span class="material-icons text-sm notranslate">download</span>
+            <span>${req.excelName}</span>
+          </a>
+        </div>
+      </div>
+      ` : ''}
+      ${req.photoName ? `
+      <div class="flex items-start gap-3">
+        <span class="material-icons text-purple-500 mt-1 notranslate text-sm">image</span>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1 text-sm">${translations[lang]['detail-photo-label'] || '사진'}</h3>
+          <img src="${req.photoName}" class="w-full max-w-48 rounded-xl border border-gray-300 shadow-lg mt-2">
+        </div>
+      </div>
+      ` : ''}
+    </div>
+  `;
+}
 
 // 담당자 연락처 봇 기능
 const contactBotBtn = document.getElementById('contact-bot-btn');
@@ -434,7 +587,7 @@ document.addEventListener('click', (e) => {
 // 초기화: fetchData로 데이터 받아와서 렌더링
 fetchData().then(data => {
   requests = data;
-  showList();
+  renderList();
   setLanguage('zh_CN'); // 첫 진입시 중국어(간체)로 고정
 });
 
