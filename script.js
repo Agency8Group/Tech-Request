@@ -1,7 +1,13 @@
-// 실제 데이터 연동을 고려한 구조
-let requests = [];
+/**
+ * EIBE 기술요청서 뷰어
+ * 다국어 지원 아코디언 방식 기술요청서 관리 시스템
+ */
 
-// 번역 데이터(내장)
+// 전역 변수
+let requests = [];
+let currentLanguage = 'zh_CN'; // 기본 언어
+
+// 번역 데이터
 const translations = {
   ko: {
     'title-text': 'EIBE 기술요청서 뷰어 - 技术请求查看器',
@@ -224,13 +230,23 @@ const translations = {
   }
 };
 
+// DOM 요소 참조
+const listSection = document.getElementById('request-list-section');
+const requestListTbody = document.querySelector('#request-list-desktop tbody');
+const requestListMobile = document.getElementById('request-list-mobile');
+
+/**
+ * 언어 설정 함수
+ * @param {string} lang - 언어 코드 (ko, zh_CN, zh_TW)
+ */
 function setLanguage(lang) {
-  window.currentLang = lang;
+  currentLanguage = lang;
   const dict = translations[lang];
   if (!dict) return;
+  
+  // 기본 UI 요소 번역
   Object.keys(dict).forEach(id => {
-    // 요청자 이름(목록, 상세)과 고객센터 담당자 이름은 항상 한글로 고정
-    // (이름 옆에는 무조건 이름은 한글로 한다)
+    // 요청자 이름은 항상 한글로 고정
     if (
       id.startsWith('list-requester-') ||
       id.startsWith('detail-requester-') ||
@@ -240,14 +256,15 @@ function setLanguage(lang) {
     ) {
       const el = document.getElementById(id);
       if (el && translations.ko[id]) {
-        el.textContent = translations.ko[id]; // 이름은 무조건 한글로 한다
+        el.textContent = translations.ko[id];
       }
     } else {
       const el = document.getElementById(id);
       if (el) el.textContent = dict[id];
     }
   });
-  // 아코디언 내용도 번역
+  
+  // 아코디언 내용 및 버튼 번역
   requests.forEach(req => {
     const accordionContent = document.getElementById(`accordion-content-${req.id}`);
     if (accordionContent) {
@@ -266,17 +283,19 @@ function setLanguage(lang) {
   });
 }
 
-// 실제 데이터 연동 시 이 함수만 수정하면 됨
+/**
+ * 데이터 가져오기 함수 (실제 연동 시 수정)
+ * @returns {Promise<Array>} 요청서 데이터 배열
+ */
 function fetchData() {
-  // 2개의 샘플 데이터 반환
   return Promise.resolve([
     {
       id: 'req_1',
       requester: '박효진',
       title: '센서 데이터 자동수집 기능 추가',
       details: '센서에서 발생하는 데이터를 자동으로 수집하여 엑셀로 저장하는 기능 요청',
-      excelName: 'sensor_data.xlsx',
-      photoName: 'sensor.jpg',
+      excelName: 'xlsx/sample.xlsx',
+      photoName: 'img/sample.png',
       date: '2024-06-01'
     },
     {
@@ -300,29 +319,27 @@ function fetchData() {
   ]);
 }
 
-const listSection = document.getElementById('request-list-section');
-const requestListTbody = document.querySelector('#request-list-desktop tbody');
-const requestListMobile = document.getElementById('request-list-mobile');
-
+/**
+ * 목록 렌더링 함수
+ */
 function renderList() {
   // 데스크톱 테이블 렌더링
   if (requestListTbody) {
     requestListTbody.innerHTML = '';
-    const lang = window.currentLang || 'zh_CN';
     requests.forEach((req, idx) => {
       const tr = document.createElement('tr');
       tr.className = 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-100';
       tr.innerHTML = `
         <td class="px-6 py-5 text-center align-middle font-medium text-gray-700">${idx + 1}</td>
         <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-requester-${req.id}">${translations.ko[`list-requester-${req.id}`] || req.requester}</td>
-        <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-title-${req.id}">${translations[lang][`list-title-${req.id}`] || req.title}</td>
-        <td class="px-6 py-5 text-center align-middle font-medium text-gray-600" id="list-date-${req.id}">${translations[lang][`list-date-${req.id}`] || req.date}</td>
+        <td class="px-6 py-5 text-center align-middle font-medium text-gray-700" id="list-title-${req.id}">${translations[currentLanguage][`list-title-${req.id}`] || req.title}</td>
+        <td class="px-6 py-5 text-center align-middle font-medium text-gray-600" id="list-date-${req.id}">${translations[currentLanguage][`list-date-${req.id}`] || req.date}</td>
         <td class="px-6 py-5 text-center align-middle">
           <button onclick="toggleAccordion('${req.id}')" class="group relative bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-6 py-2.5 rounded-2xl cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 ease-out overflow-hidden">
             <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             <span class="relative flex items-center gap-1.5">
               <span class="material-icons text-sm notranslate accordion-icon-${req.id}">expand_more</span>
-              <span id="view-btn-text-${req.id}">${translations[lang]['view-btn-text'] || '보기'}</span>
+              <span id="view-btn-text-${req.id}">${translations[currentLanguage]['view-btn-text'] || '보기'}</span>
             </span>
           </button>
         </td>
@@ -347,7 +364,6 @@ function renderList() {
   // 모바일 카드 렌더링
   if (requestListMobile) {
     requestListMobile.innerHTML = '';
-    const lang = window.currentLang || 'zh_CN';
     requests.forEach((req, idx) => {
       const card = document.createElement('div');
       card.className = 'bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300';
@@ -358,15 +374,15 @@ function renderList() {
               <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm">${idx + 1}</div>
               <div>
                 <p class="font-semibold text-gray-900" id="mobile-requester-${req.id}">${translations.ko[`list-requester-${req.id}`] || req.requester}</p>
-                <p class="text-sm text-gray-500" id="mobile-date-${req.id}">${translations[lang][`list-date-${req.id}`] || req.date}</p>
+                <p class="text-sm text-gray-500" id="mobile-date-${req.id}">${translations[currentLanguage][`list-date-${req.id}`] || req.date}</p>
               </div>
             </div>
             <button onclick="toggleMobileAccordion('${req.id}')" class="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-4 py-2 rounded-lg cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 flex items-center gap-1">
               <span class="material-icons text-sm notranslate mobile-accordion-icon-${req.id}">expand_more</span>
-              <span id="mobile-view-btn-text-${req.id}">${translations[lang]['view-btn-text'] || '보기'}</span>
+              <span id="mobile-view-btn-text-${req.id}">${translations[currentLanguage]['view-btn-text'] || '보기'}</span>
             </button>
           </div>
-          <h3 class="font-bold text-gray-900 mb-2" id="mobile-title-${req.id}">${translations[lang][`list-title-${req.id}`] || req.title}</h3>
+          <h3 class="font-bold text-gray-900 mb-2" id="mobile-title-${req.id}">${translations[currentLanguage][`list-title-${req.id}`] || req.title}</h3>
           <div id="mobile-accordion-content-${req.id}" class="hidden">
             <!-- 모바일 아코디언 내용 -->
           </div>
@@ -383,55 +399,66 @@ function renderList() {
   }
 }
 
+/**
+ * 데스크톱 아코디언 토글 함수
+ * @param {string} id - 요청서 ID
+ */
 function toggleAccordion(id) {
   const accordionRow = document.getElementById(`accordion-row-${id}`);
   const accordionIcon = document.querySelector(`.accordion-icon-${id}`);
   const viewBtnText = document.getElementById(`view-btn-text-${id}`);
-  const lang = window.currentLang || 'zh_CN';
   
   if (accordionRow.classList.contains('hidden')) {
     // 열기
     accordionRow.classList.remove('hidden');
     accordionIcon.textContent = 'expand_less';
-    viewBtnText.textContent = translations[lang]['close-btn-text'] || '접기';
+    viewBtnText.textContent = translations[currentLanguage]['close-btn-text'] || '접기';
     
     // 아코디언 내용 생성
     const accordionContent = document.getElementById(`accordion-content-${id}`);
     if (accordionContent && !accordionContent.hasChildNodes()) {
-      updateAccordionContent(id, lang);
+      updateAccordionContent(id, currentLanguage);
     }
   } else {
     // 닫기
     accordionRow.classList.add('hidden');
     accordionIcon.textContent = 'expand_more';
-    viewBtnText.textContent = translations[lang]['view-btn-text'] || '보기';
+    viewBtnText.textContent = translations[currentLanguage]['view-btn-text'] || '보기';
   }
 }
 
+/**
+ * 모바일 아코디언 토글 함수
+ * @param {string} id - 요청서 ID
+ */
 function toggleMobileAccordion(id) {
   const accordionContent = document.getElementById(`mobile-accordion-content-${id}`);
   const accordionIcon = document.querySelector(`.mobile-accordion-icon-${id}`);
   const viewBtnText = document.getElementById(`mobile-view-btn-text-${id}`);
-  const lang = window.currentLang || 'zh_CN';
   
   if (accordionContent.classList.contains('hidden')) {
     // 열기
     accordionContent.classList.remove('hidden');
     accordionIcon.textContent = 'expand_less';
-    viewBtnText.textContent = translations[lang]['close-btn-text'] || '접기';
+    viewBtnText.textContent = translations[currentLanguage]['close-btn-text'] || '접기';
     
     // 아코디언 내용 생성
     if (!accordionContent.hasChildNodes()) {
-      updateMobileAccordionContent(id, lang);
+      updateMobileAccordionContent(id, currentLanguage);
     }
   } else {
     // 닫기
     accordionContent.classList.add('hidden');
     accordionIcon.textContent = 'expand_more';
-    viewBtnText.textContent = translations[lang]['view-btn-text'] || '보기';
+    viewBtnText.textContent = translations[currentLanguage]['view-btn-text'] || '보기';
   }
 }
 
+/**
+ * 데스크톱 아코디언 내용 업데이트
+ * @param {string} id - 요청서 ID
+ * @param {string} lang - 언어 코드
+ */
 function updateAccordionContent(id, lang) {
   const req = requests.find(r => r.id === id);
   const accordionContent = document.getElementById(`accordion-content-${id}`);
@@ -485,7 +512,7 @@ function updateAccordionContent(id, lang) {
         <span class="material-icons text-purple-500 mt-1 notranslate">image</span>
         <div>
           <h3 class="font-bold text-gray-900 mb-1">${translations[lang]['detail-photo-label'] || '사진'}</h3>
-          <img src="${req.photoName}" class="max-w-64 max-h-48 rounded-xl border border-gray-300 shadow-lg mt-2">
+          <img src="${req.photoName}" onclick="openImageModal('${req.photoName}')" class="max-w-64 max-h-48 rounded-xl border border-gray-300 shadow-lg mt-2 cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300" title="클릭하여 크게 보기">
         </div>
       </div>
       ` : ''}
@@ -493,6 +520,11 @@ function updateAccordionContent(id, lang) {
   `;
 }
 
+/**
+ * 모바일 아코디언 내용 업데이트
+ * @param {string} id - 요청서 ID
+ * @param {string} lang - 언어 코드
+ */
 function updateMobileAccordionContent(id, lang) {
   const req = requests.find(r => r.id === id);
   const accordionContent = document.getElementById(`mobile-accordion-content-${id}`);
@@ -546,7 +578,7 @@ function updateMobileAccordionContent(id, lang) {
         <span class="material-icons text-purple-500 mt-1 notranslate text-sm">image</span>
         <div>
           <h3 class="font-bold text-gray-900 mb-1 text-sm">${translations[lang]['detail-photo-label'] || '사진'}</h3>
-          <img src="${req.photoName}" class="w-full max-w-48 rounded-xl border border-gray-300 shadow-lg mt-2">
+          <img src="${req.photoName}" onclick="openImageModal('${req.photoName}')" class="w-full max-w-48 rounded-xl border border-gray-300 shadow-lg mt-2 cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300" title="클릭하여 크게 보기">
         </div>
       </div>
       ` : ''}
@@ -554,11 +586,19 @@ function updateMobileAccordionContent(id, lang) {
   `;
 }
 
-// 담당자 연락처 봇 기능
+// 연락처 봇 기능
 const contactBotBtn = document.getElementById('contact-bot-btn');
 const contactPopup = document.getElementById('contact-popup');
 const closeContact = document.getElementById('close-contact');
 
+// 이미지 모달 기능
+const imageModal = document.getElementById('image-modal');
+const modalImage = document.getElementById('modal-image');
+const closeImageModal = document.getElementById('close-image-modal');
+
+/**
+ * 연락처 팝업 토글 함수
+ */
 function toggleContactPopup() {
   const isOpen = contactPopup.classList.contains('opacity-100');
   
@@ -573,8 +613,28 @@ function toggleContactPopup() {
   }
 }
 
+/**
+ * 이미지 모달 열기 함수
+ * @param {string} imageSrc - 이미지 경로
+ */
+function openImageModal(imageSrc) {
+  modalImage.src = imageSrc;
+  imageModal.classList.remove('opacity-0', 'pointer-events-none');
+  imageModal.classList.add('opacity-100', 'pointer-events-auto');
+}
+
+/**
+ * 이미지 모달 닫기 함수
+ */
+function closeImageModalFunc() {
+  imageModal.classList.remove('opacity-100', 'pointer-events-auto');
+  imageModal.classList.add('opacity-0', 'pointer-events-none');
+}
+
+// 이벤트 리스너 등록
 contactBotBtn.addEventListener('click', toggleContactPopup);
 closeContact.addEventListener('click', toggleContactPopup);
+closeImageModal.addEventListener('click', closeImageModalFunc);
 
 // 팝업 외부 클릭 시 닫기
 document.addEventListener('click', (e) => {
@@ -582,22 +642,42 @@ document.addEventListener('click', (e) => {
     contactPopup.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0', 'scale-100');
     contactPopup.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4', 'scale-95');
   }
+  
+  // 이미지 모달 외부 클릭 시 닫기
+  if (imageModal.contains(e.target) && !modalImage.contains(e.target) && !closeImageModal.contains(e.target)) {
+    closeImageModalFunc();
+  }
 });
 
-// 초기화: fetchData로 데이터 받아와서 렌더링
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeImageModalFunc();
+  }
+});
+
+// 초기화
 fetchData().then(data => {
   requests = data;
   renderList();
   setLanguage('zh_CN'); // 첫 진입시 중국어(간체)로 고정
 });
 
-// 콘솔에서 직접 데이터 추가/수정/삭제할 수 있는 함수
-// addRequest({id, requester, title, details, excelName, photoName, date})
+// 개발용 유틸리티 함수들
+/**
+ * 새 요청서 추가 (개발용)
+ * @param {Object} newReq - 새 요청서 객체
+ */
 function addRequest(newReq) {
   requests.push(newReq);
   renderList();
 }
-// updateRequest('req_1', {title: '수정된 제목'})
+
+/**
+ * 요청서 수정 (개발용)
+ * @param {string} id - 요청서 ID
+ * @param {Object} updatedReq - 수정할 내용
+ */
 function updateRequest(id, updatedReq) {
   const idx = requests.findIndex(r => r.id === id);
   if (idx !== -1) {
@@ -605,7 +685,11 @@ function updateRequest(id, updatedReq) {
     renderList();
   }
 }
-// deleteRequest('req_1')
+
+/**
+ * 요청서 삭제 (개발용)
+ * @param {string} id - 요청서 ID
+ */
 function deleteRequest(id) {
   requests = requests.filter(r => r.id !== id);
   renderList();

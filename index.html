@@ -15,11 +15,13 @@
   <meta property="og:image" content="/img/og-china.png">
 </head>
 <body class="font-['Noto Sans SC'] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 m-0 p-0 min-h-screen">
+  <!-- 헤더 섹션 -->
   <header class="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white py-8 sm:py-16 pb-8 sm:pb-12 text-center mb-8 sm:mb-16 rounded-b-4xl shadow-2xl relative overflow-hidden">
     <!-- 배경 패턴 -->
     <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
     <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
-    <!-- 번역 버튼들 -->
+    
+    <!-- 언어 선택 버튼 -->
     <div class="absolute top-2 sm:top-4 right-2 sm:right-6 flex gap-1 sm:gap-2 z-20">
       <button onclick="setLanguage('zh_CN')" title="简体中文" class="bg-white/20 backdrop-blur-sm text-white border border-white/30 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
         <span class="text-xs">🇨🇳</span>
@@ -34,6 +36,8 @@
         <span class="hidden sm:inline">한국어</span>
       </button>
     </div>
+    
+    <!-- 헤더 콘텐츠 -->
     <div class="relative z-10 px-4">
       <div class="mb-4 sm:mb-6">
         <div class="inline-flex items-center gap-2 sm:gap-3 bg-white/10 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-white/20 mb-4 sm:mb-6">
@@ -41,10 +45,14 @@
           <span id="sub-title" class="text-blue-100 font-medium text-sm sm:text-base">Technical Request Viewer</span>
         </div>
       </div>
+      
       <h1 id="main-title" class="text-2xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">
         EIBE 전산개발 기술요청서 뷰어
       </h1>
+      
       <p id="main-desc" class="text-blue-100 text-lg sm:text-xl font-medium mb-6 sm:mb-8">동수 개발사 참고용</p>
+      
+      <!-- 기능 설명 -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-6 sm:mb-8">
         <div class="flex items-center gap-2 text-blue-200">
           <span class="material-icons text-sm notranslate">developer_mode</span>
@@ -61,26 +69,18 @@
           <span id="collab-tool" class="text-sm">협업 도구</span>
         </div>
       </div>
+      
+      <!-- 애니메이션 라인 -->
       <div class="relative">
         <div class="h-1 w-32 sm:w-48 bg-gradient-to-r from-transparent via-white to-transparent mx-auto rounded-full shadow-lg" style="animation: slowPulse 3s ease-in-out infinite;"></div>
         <div class="absolute inset-0 h-1 w-32 sm:w-48 bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto rounded-full" style="animation: slowPing 4s ease-in-out infinite;"></div>
         <div class="absolute inset-0 h-1 w-32 sm:w-48 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full" style="animation: slowPulse 3s ease-in-out infinite; animation-delay: 1.5s;"></div>
       </div>
-      <style>
-        @keyframes slowPulse {
-          0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
-          50% { opacity: 1; transform: scaleX(1.2); }
-        }
-        @keyframes slowPing {
-          0% { opacity: 0.8; transform: scaleX(1); }
-          50% { opacity: 0.2; transform: scaleX(1.5); }
-          100% { opacity: 0; transform: scaleX(2); }
-        }
-      </style>
     </div>
   </header>
-  <main class="max-w-8xl mx-auto bg-white/80 backdrop-blur-sm p-4 sm:p-8 lg:p-12 pb-8 sm:pb-12 lg:pb-16 rounded-3xl shadow-2xl border border-white/20 mx-4 sm:mx-8">
+  <main class="max-w-[2000px] mx-auto bg-white/80 backdrop-blur-sm p-4 sm:p-8 lg:p-12 pb-8 sm:pb-12 lg:pb-16 rounded-3xl shadow-2xl border border-white/20 ">
     <section id="request-list-section" class="opacity-100 translate-y-0 transition-all duration-500 ease-out">
+      <!-- 섹션 헤더 -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
         <div>
           <h2 id="list-title" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">요청서 목록</h2>
@@ -88,11 +88,13 @@
         </div>
         <div class="flex items-center gap-2 text-sm text-gray-500">
           <span class="material-icons text-blue-500 notranslate">info</span>
-          <span id="total-label">총</span> <span id="request-count" class="font-semibold text-blue-600">0</span><span id="count-unit">건</span>
+          <span id="total-label">총</span> 
+          <span id="request-count" class="font-semibold text-blue-600">0</span>
+          <span id="count-unit">건</span>
         </div>
       </div>
       
-      <!-- 데스크톱 테이블 (lg 이상에서만 표시) -->
+      <!-- 데스크톱 테이블 (lg 이상) -->
       <div class="hidden lg:block overflow-hidden rounded-2xl shadow-xl border border-gray-100">
         <table id="request-list-desktop" class="w-full border-collapse bg-white">
           <thead>
@@ -105,17 +107,18 @@
             </tr>
           </thead>
           <tbody>
-            <!-- JS로 데이터 렌더링 -->
+            <!-- JavaScript로 데이터 렌더링 -->
           </tbody>
         </table>
       </div>
 
-      <!-- 모바일/태블릿 카드 리스트 (lg 미만에서만 표시) -->
+      <!-- 모바일/태블릿 카드 리스트 (lg 미만) -->
       <div id="request-list-mobile" class="lg:hidden space-y-4">
-        <!-- JS로 카드 데이터 렌더링 -->
+        <!-- JavaScript로 카드 데이터 렌더링 -->
       </div>
     </section>
   </main>
+
   <!-- 담당자 연락처 봇 -->
   <div id="contact-bot" class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50">
     <!-- 봇 버튼 -->
@@ -125,9 +128,10 @@
         <span class="material-icons text-xs sm:text-sm notranslate">phone</span>
       </div>
     </button>
+    
     <!-- 연락처 팝업 -->
     <div id="contact-popup" class="absolute bottom-12 sm:bottom-16 right-0 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 opacity-0 pointer-events-none transform translate-y-4 scale-95 transition-all duration-300 ease-out">
-      <!-- 헤더 -->
+      <!-- 팝업 헤더 -->
       <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-t-2xl">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
@@ -142,6 +146,7 @@
           </button>
         </div>
       </div>
+      
       <!-- 연락처 내용 -->
       <div class="p-4 sm:p-6 space-y-4 max-h-80 sm:max-h-96 overflow-y-auto">
         <!-- 박효진 대리 -->
@@ -183,6 +188,7 @@
             </div>
           </div>
         </div>
+        
         <!-- 박민찬 주임 -->
         <div class="border-b border-gray-200 pb-4">
           <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl mb-3">
@@ -229,6 +235,7 @@
             </div>
           </div>
         </div>
+        
         <!-- 지윤환 과장 -->
         <div class="pb-4">
           <div class="flex items-start gap-3 p-3 bg-orange-50 rounded-xl mb-3">
@@ -260,6 +267,37 @@
       </div>
     </div>
   </div>
+
+  <!-- 애니메이션 스타일 -->
+  <style>
+    @keyframes slowPulse {
+      0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
+      50% { opacity: 1; transform: scaleX(1.2); }
+    }
+    @keyframes slowPing {
+      0% { opacity: 0.8; transform: scaleX(1); }
+      50% { opacity: 0.2; transform: scaleX(1.5); }
+      100% { opacity: 0; transform: scaleX(2); }
+    }
+  </style>
+
+  <!-- 이미지 모달 -->
+  <div id="image-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center">
+    <div class="relative w-full h-full bg-black flex flex-col">
+      <!-- 모달 헤더 -->
+      <div class="flex items-center justify-between p-4 bg-black/50 text-white border-b border-white/20">
+        <h3 class="font-bold text-white">이미지 보기</h3>
+        <button id="close-image-modal" class="text-white/80 hover:text-white transition-colors">
+          <span class="material-icons text-3xl notranslate">close</span>
+        </button>
+      </div>
+      <!-- 이미지 컨테이너 -->
+      <div class="flex-1 flex items-center justify-center p-4">
+        <img id="modal-image" src="" alt="확대된 이미지" class="max-w-full max-h-full object-contain">
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html> 
