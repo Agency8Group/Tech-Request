@@ -595,6 +595,8 @@ const closeContact = document.getElementById('close-contact');
 const imageModal = document.getElementById('image-modal');
 const modalImage = document.getElementById('modal-image');
 const closeImageModal = document.getElementById('close-image-modal');
+const downloadImageBtn = document.getElementById('download-image-btn');
+const openImageNewtabBtn = document.getElementById('open-image-newtab-btn');
 
 /**
  * 연락처 팝업 토글 함수
@@ -621,6 +623,8 @@ function openImageModal(imageSrc) {
   modalImage.src = imageSrc;
   imageModal.classList.remove('opacity-0', 'pointer-events-none');
   imageModal.classList.add('opacity-100', 'pointer-events-auto');
+  if (downloadImageBtn) downloadImageBtn.href = imageSrc;
+  if (openImageNewtabBtn) openImageNewtabBtn.href = imageSrc;
 }
 
 /**

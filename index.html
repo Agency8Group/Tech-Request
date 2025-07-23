@@ -78,7 +78,7 @@
       </div>
     </div>
   </header>
-  <main class="max-w-[2000px] mx-auto bg-white/80 backdrop-blur-sm p-4 sm:p-8 lg:p-12 pb-8 sm:pb-12 lg:pb-16 rounded-3xl shadow-2xl border border-white/20 ">
+  <main class="max-w-[1500px] mx-auto bg-white/80 backdrop-blur-sm p-4 sm:p-8 lg:p-12 pb-8 sm:pb-12 lg:pb-16 rounded-3xl shadow-2xl border border-white/20 ">
     <section id="request-list-section" class="opacity-100 translate-y-0 transition-all duration-500 ease-out">
       <!-- 섹션 헤더 -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
@@ -287,9 +287,19 @@
       <!-- 모달 헤더 -->
       <div class="flex items-center justify-between p-4 bg-black/50 text-white border-b border-white/20">
         <h3 class="font-bold text-white">이미지 보기</h3>
-        <button id="close-image-modal" class="text-white/80 hover:text-white transition-colors">
-          <span class="material-icons text-3xl notranslate">close</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <a id="download-image-btn" href="#" download class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-all" title="이미지 다운로드">
+            <span class="material-icons text-base notranslate">download</span>
+            <span class="text-sm">다운로드</span>
+          </a>
+          <a id="open-image-newtab-btn" href="#" target="_blank" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-all" title="새 탭에서 보기">
+            <span class="material-icons text-base notranslate">open_in_new</span>
+            <span class="text-sm">새탭</span>
+          </a>
+          <button id="close-image-modal" class="text-white/80 hover:text-white transition-colors ml-2">
+            <span class="material-icons text-3xl notranslate">close</span>
+          </button>
+        </div>
       </div>
       <!-- 이미지 컨테이너 -->
       <div class="flex-1 flex items-center justify-center p-4">
