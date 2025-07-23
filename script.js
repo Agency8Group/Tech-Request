@@ -323,7 +323,7 @@ function fetchData() {
  * 목록 렌더링 함수
  */
 function renderList() {
-  // 데스크톱 테이블 렌더링
+  // 데스크톱 테이블 렌더링만 남김
   if (requestListTbody) {
     requestListTbody.innerHTML = '';
     requests.forEach((req, idx) => {
@@ -360,38 +360,6 @@ function renderList() {
       requestListTbody.appendChild(accordionRow);
     });
   }
-  
-  // 모바일 카드 렌더링
-  if (requestListMobile) {
-    requestListMobile.innerHTML = '';
-    requests.forEach((req, idx) => {
-      const card = document.createElement('div');
-      card.className = 'bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300';
-      card.innerHTML = `
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm">${idx + 1}</div>
-              <div>
-                <p class="font-semibold text-gray-900" id="mobile-requester-${req.id}">${translations.ko[`list-requester-${req.id}`] || req.requester}</p>
-                <p class="text-sm text-gray-500" id="mobile-date-${req.id}">${translations[currentLanguage][`list-date-${req.id}`] || req.date}</p>
-              </div>
-            </div>
-            <button onclick="toggleMobileAccordion('${req.id}')" class="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-white border-none px-4 py-2 rounded-lg cursor-pointer font-medium shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-102 transition-all duration-300 flex items-center gap-1">
-              <span class="material-icons text-sm notranslate mobile-accordion-icon-${req.id}">expand_more</span>
-              <span id="mobile-view-btn-text-${req.id}">${translations[currentLanguage]['view-btn-text'] || '보기'}</span>
-            </button>
-          </div>
-          <h3 class="font-bold text-gray-900 mb-2" id="mobile-title-${req.id}">${translations[currentLanguage][`list-title-${req.id}`] || req.title}</h3>
-          <div id="mobile-accordion-content-${req.id}" class="hidden">
-            <!-- 모바일 아코디언 내용 -->
-          </div>
-        </div>
-      `;
-      requestListMobile.appendChild(card);
-    });
-  }
-  
   // 요청서 개수 업데이트
   const requestCount = document.getElementById('request-count');
   if (requestCount) {
